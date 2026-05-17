@@ -1,5 +1,4 @@
-import { tracks, constellations, tickets } from "./data.js";
-import { initStarfield, renderConstellations } from "./stars.js";
+import { tracks, tickets } from "./data.js";
 import { initPlayer } from "./player.js";
 import { initBooth } from "./reel.js";
 import { initCursor } from "./cursor.js";
@@ -11,14 +10,6 @@ setTimeout(() => document.body.classList.remove("is-loading"), 500);
 
 // ---- desktop cursor ----
 initCursor();
-
-// ---- starfield ----
-const starCanvas = document.querySelector("[data-starfield]");
-if (starCanvas) initStarfield(starCanvas);
-
-// ---- constellations ----
-const conHost = document.querySelector("[data-constellations]");
-if (conHost) renderConstellations(conHost, constellations);
 
 // ---- player ----
 const audio = document.querySelector("[data-audio]");
@@ -59,12 +50,12 @@ const dockSheet = document.querySelector("[data-dock-sheet]");
 const dockBackdrop = document.querySelector("[data-dock-backdrop]");
 if (dock) initDock({ dock, pill: dockPill, sheet: dockSheet, backdrop: dockBackdrop, audio, player });
 
-// ---- begin the evening: starts music + scrolls into the sky ----
+// ---- begin the evening: starts music + scrolls to the record ----
 const beginBtn = document.querySelector("[data-intro-start]");
 if (beginBtn) {
   beginBtn.addEventListener("click", () => {
     player.play();
-    document.getElementById("sky")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.getElementById("record")?.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 }
 
@@ -79,16 +70,6 @@ const ioReveal = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.15 });
 revealEls.forEach(el => { el.classList.add("reveal"); ioReveal.observe(el); });
-
-// tap outside closes any open constellation
-document.addEventListener("click", e => {
-  if (!e.target.closest(".con-card")) {
-    document.querySelectorAll(".con-card.is-open").forEach(o => {
-      o.classList.remove("is-open");
-      o.setAttribute("aria-expanded", "false");
-    });
-  }
-});
 
 // ---- owl blink ----
 const owl = document.querySelector(".owl");

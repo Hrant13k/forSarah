@@ -17,7 +17,7 @@ export function initCursor() {
   document.addEventListener("mouseleave", () => cur.classList.add("is-hidden"));
   document.addEventListener("mouseenter", () => cur.classList.remove("is-hidden"));
 
-  const HOVER_SEL = "a, button, .con-card, .artist, .polaroid, .tracklist li, .np-progress, .ds-progress, .annotated, .intro-start";
+  const HOVER_SEL = "a, button, .artist, .ticket, .tracklist li, .np-progress, .ds-progress, .intro-start, .booth-arrow";
   document.addEventListener("mouseover", e => {
     if (e.target.closest(HOVER_SEL)) cur.classList.add("is-hover");
   });

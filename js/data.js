@@ -25,52 +25,6 @@ export const tracks = [
   { n: 21, title: "Beautiful Oblivion (feat. IDK)", file: "21. Beautiful Oblivion (feat. IDK).mp3" },
 ].map(t => ({ ...t, src: `${ALBUM_DIR}/${t.file}`.split("/").map(encodeURIComponent).join("/") }));
 
-// ---- constellations: SVG arrangements; tap-to-reveal lines + a quote ----
-export const constellations = [
-  {
-    name: "the owl",
-    tag: "watcher",
-    quote: "she keeps the night honest. eyes wide, asking nothing.",
-    stars: [[20,30],[35,22,1],[50,18],[65,22,1],[80,30],[42,40],[58,40],[50,60,1],[35,80],[65,80]],
-    lines: [[0,1],[1,2],[2,3],[3,4],[1,5],[3,6],[5,6],[5,7],[6,7],[7,8],[7,9]],
-  },
-  {
-    name: "the lamplight cat",
-    tag: "soft",
-    quote: "sleeps where the lamplight is best. understands you, doesn't say so.",
-    stars: [[15,55],[25,40,1],[35,30],[45,40,1],[55,30],[65,40],[80,55,1],[70,75],[50,85],[30,75]],
-    lines: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,0]],
-  },
-  {
-    name: "the autumn window",
-    tag: "october",
-    quote: "the season she always returns to. so do most of her songs.",
-    stars: [[20,20,1],[80,20,1],[20,80,1],[80,80,1],[20,50],[80,50],[50,20],[50,80],[50,50,1]],
-    lines: [[0,1],[1,3],[3,2],[2,0],[0,8],[1,8],[2,8],[3,8],[4,5],[6,7]],
-  },
-  {
-    name: "the slow record",
-    tag: "side b",
-    quote: "every revolution is the same song, told slightly later.",
-    stars: [[50,15,1],[78,30],[88,55],[78,80],[50,90,1],[22,80],[12,55],[22,30],[50,55,1]],
-    lines: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,0],[0,8],[2,8],[4,8],[6,8]],
-  },
-  {
-    name: "the long sentence",
-    tag: "reader",
-    quote: "underlining the parts she thinks no one else has noticed.",
-    stars: [[10,30],[28,28,1],[44,32],[62,28,1],[80,30],[90,55],[72,72,1],[50,76],[28,72,1],[12,55]],
-    lines: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,0]],
-  },
-  {
-    name: "the small distance",
-    tag: "introvert",
-    quote: "the polite step back. the deeper kind of attention.",
-    stars: [[28,28,1],[72,28],[50,50,1],[28,72],[72,72,1]],
-    lines: [[0,2],[1,2],[3,2],[4,2]],
-  },
-];
-
 // ---- tickets: a small stack of evening stubs. each is a swipeable card. ----
 const C = "images/curated";
 
