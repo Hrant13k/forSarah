@@ -1,6 +1,6 @@
-// Custom cursor + cat drift easter egg
+// Custom cursor — desktop only. No cat-drift anymore; the dock is the ambient anchor.
 export function initCursor() {
-  if (matchMedia("(pointer: coarse)").matches) return;
+  if (!matchMedia("(pointer: fine)").matches) return;
   const cur = document.querySelector(".cursor");
   if (!cur) return;
 
@@ -17,39 +17,11 @@ export function initCursor() {
   document.addEventListener("mouseleave", () => cur.classList.add("is-hidden"));
   document.addEventListener("mouseenter", () => cur.classList.remove("is-hidden"));
 
-  // Hover state on interactive
-  const HOVER_SEL = "a, button, .con-card, .artist, .polaroid, .tracklist li, .np-progress, .annotated";
+  const HOVER_SEL = "a, button, .con-card, .artist, .polaroid, .tracklist li, .np-progress, .ds-progress, .annotated, .intro-start";
   document.addEventListener("mouseover", e => {
     if (e.target.closest(HOVER_SEL)) cur.classList.add("is-hover");
   });
   document.addEventListener("mouseout", e => {
     if (e.target.closest(HOVER_SEL)) cur.classList.remove("is-hover");
   });
-}
-
-export function initCatDrift() {
-  const cat = document.querySelector(".cat");
-  if (!cat) return;
-  let last = Date.now();
-  let idleTimer = null;
-
-  function maybeWalk() {
-    if (cat.classList.contains("is-walking")) return;
-    cat.classList.add("is-walking");
-    setTimeout(() => cat.classList.remove("is-walking"), 27000);
-  }
-  function resetIdle() {
-    last = Date.now();
-    clearTimeout(idleTimer);
-    idleTimer = setTimeout(() => {
-      // user idle ~45s → cat walks by
-      maybeWalk();
-    }, 45000);
-  }
-  ["mousemove", "scroll", "keydown", "touchstart"].forEach(ev =>
-    document.addEventListener(ev, resetIdle, { passive: true })
-  );
-  // First scheduled walk ~50s after load
-  setTimeout(maybeWalk, 50000);
-  resetIdle();
 }

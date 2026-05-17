@@ -2,96 +2,119 @@ import { tracks, constellations, reel } from "./data.js";
 import { initStarfield, renderConstellations } from "./stars.js";
 import { initPlayer } from "./player.js";
 import { initReel } from "./reel.js";
-import { initCursor, initCatDrift } from "./cursor.js";
+import { initCursor } from "./cursor.js";
+import { initDock } from "./dock.js";
 
-// Mark loaded once fonts settle (kept short — fonts have own swap)
-window.addEventListener("load", () => {
-  document.body.classList.remove("is-loading");
-});
-// Fallback in case `load` is slow on poor networks
-setTimeout(() => document.body.classList.remove("is-loading"), 400);
+// ---- mark loaded ----
+window.addEventListener("load", () => document.body.classList.remove("is-loading"));
+setTimeout(() => document.body.classList.remove("is-loading"), 500);
 
-// ---- Ambient + UI ----
+// ---- desktop cursor ----
 initCursor();
-initCatDrift();
 
-// ---- Starfield ----
+// ---- starfield ----
 const starCanvas = document.querySelector("[data-starfield]");
 if (starCanvas) initStarfield(starCanvas);
 
-// ---- Constellations ----
+// ---- constellations ----
 const conHost = document.querySelector("[data-constellations]");
 if (conHost) renderConstellations(conHost, constellations);
 
-// ---- Player ----
+// ---- player ----
 const audio = document.querySelector("[data-audio]");
+const soundSwitch = document.querySelector("[data-music-toggle]");
+
 const player = initPlayer({
   audio,
   tracks,
   ui: {
-    tracklist:   document.querySelector("[data-tracklist]"),
-    playBtns:    document.querySelectorAll("[data-play]"),
-    prevBtns:    document.querySelectorAll("[data-prev]"),
-    nextBtns:    document.querySelectorAll("[data-next]"),
-    progress:    document.querySelector("[data-progress]"),
-    progressBar: document.querySelector("[data-progress-bar]"),
-    timeCurrent: document.querySelector("[data-time-current]"),
-    timeTotal:   document.querySelector("[data-time-total]"),
-    vinyl:       document.querySelector("[data-vinyl]"),
-    musicToggle: document.querySelector("[data-music-toggle]"),
-    miniPlayer:  document.querySelector("[data-mini-player]"),
+    tracklist:    document.querySelector("[data-tracklist]"),
+    playBtns:     document.querySelectorAll("[data-play]"),
+    prevBtns:     document.querySelectorAll("[data-prev]"),
+    nextBtns:     document.querySelectorAll("[data-next]"),
+    progresses:   document.querySelectorAll("[data-progress]"),
+    progressBars: document.querySelectorAll("[data-progress-bar]"),
+    progressThumbs: document.querySelectorAll("[data-progress-thumb]"),
+    timeCurrents: document.querySelectorAll("[data-time-current]"),
+    timeTotals:   document.querySelectorAll("[data-time-total]"),
+    titleTargets: document.querySelectorAll("[data-track-title]"),
+    vinyl:        document.querySelector("[data-vinyl]"),
+    soundSwitch,
+    dockNow:      document.querySelector(".dock-now"),
   },
 });
 
-// ---- Reel ----
+// ---- reel ----
 const reelHost = document.querySelector("[data-reel]");
-if (reelHost) {
-  initReel(reelHost, reel, {
-    prevBtn: document.querySelector("[data-reel-prev]"),
-    nextBtn: document.querySelector("[data-reel-next]"),
+if (reelHost) initReel(reelHost, reel);
+
+// ---- dock player ----
+const dock = document.querySelector("[data-dock]");
+const dockPill = document.querySelector("[data-dock-toggle]");
+const dockSheet = document.querySelector("[data-dock-sheet]");
+const dockBackdrop = document.querySelector("[data-dock-backdrop]");
+if (dock) initDock({ dock, pill: dockPill, sheet: dockSheet, backdrop: dockBackdrop, audio, player });
+
+// ---- begin the evening: starts music + scrolls into the sky ----
+const beginBtn = document.querySelector("[data-intro-start]");
+if (beginBtn) {
+  beginBtn.addEventListener("click", () => {
+    player.play();
+    document.getElementById("sky")?.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 }
 
-// ---- Letter reveal on scroll (line by line) ----
+// ---- letter reveal line by line ----
 const letterLines = document.querySelectorAll("[data-letter-line]");
-const io = new IntersectionObserver((entries) => {
+const ioLetter = new IntersectionObserver((entries) => {
   entries.forEach((e, i) => {
     if (e.isIntersecting) {
       setTimeout(() => e.target.classList.add("is-revealed"), i * 180);
-      io.unobserve(e.target);
+      ioLetter.unobserve(e.target);
     }
   });
-}, { threshold: 0.4 });
-letterLines.forEach(p => io.observe(p));
+}, { threshold: 0.35 });
+letterLines.forEach(p => ioLetter.observe(p));
 
-// ---- Generic reveal-on-scroll (chapters etc.) ----
+// ---- generic reveal ----
 const revealEls = document.querySelectorAll(".scene-head, .scene-lede, .now-playing, .artist, .polaroid");
-const io2 = new IntersectionObserver((entries) => {
+const ioReveal = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
       e.target.classList.add("is-revealed");
-      io2.unobserve(e.target);
+      ioReveal.unobserve(e.target);
     }
   });
 }, { threshold: 0.15 });
-revealEls.forEach(el => { el.classList.add("reveal"); io2.observe(el); });
+revealEls.forEach(el => { el.classList.add("reveal"); ioReveal.observe(el); });
 
-// ---- Keyboard shortcuts ----
-document.addEventListener("keydown", (e) => {
-  if (e.target.matches("input, textarea")) return;
-  switch (e.key.toLowerCase()) {
-    case "m": player.toggle(); break;
-    case "k": case " ":
-      if (e.key === " " && e.target !== document.body) return;
+// ---- annotated words: tap-to-toggle on touch (hover keeps working on desktop) ----
+document.querySelectorAll(".annotated").forEach(el => {
+  el.addEventListener("click", e => {
+    if (matchMedia("(pointer: coarse)").matches) {
       e.preventDefault();
-      player.toggle();
-      break;
-    case "n": case "arrowright": player.next(); break;
-    case "p": case "arrowleft":  player.prev(); break;
+      el.classList.toggle("is-open");
+      // close peers
+      document.querySelectorAll(".annotated.is-open").forEach(o => {
+        if (o !== el) o.classList.remove("is-open");
+      });
+    }
+  });
+});
+// tap outside closes any open annotation/constellation
+document.addEventListener("click", e => {
+  if (!e.target.closest(".annotated")) {
+    document.querySelectorAll(".annotated.is-open").forEach(o => o.classList.remove("is-open"));
+  }
+  if (!e.target.closest(".con-card")) {
+    document.querySelectorAll(".con-card.is-open").forEach(o => {
+      o.classList.remove("is-open");
+      o.setAttribute("aria-expanded", "false");
+    });
   }
 });
 
-// ---- Subtle owl wink ----
+// ---- owl blink ----
 const owl = document.querySelector(".owl");
 if (owl) {
   setInterval(() => {
@@ -101,7 +124,20 @@ if (owl) {
   }, 5400);
 }
 
-// ---- Console easter egg ----
+// ---- silent keyboard shortcuts (desktop power users only — no instruction shown) ----
+document.addEventListener("keydown", (e) => {
+  if (e.target.matches("input, textarea")) return;
+  switch (e.key.toLowerCase()) {
+    case "m": case "k": player.toggle(); break;
+    case " ":
+      if (e.target !== document.body) return;
+      e.preventDefault(); player.toggle(); break;
+    case "n": case "arrowright": player.next(); break;
+    case "p": case "arrowleft":  player.prev(); break;
+  }
+});
+
+// ---- console note ----
 console.log(
   "%cyou opened the console.\n%cgood. you read the small print of things.\n— a quiet hour",
   "color:#f0b070; font-family: serif; font-style: italic; font-size: 14px;",
