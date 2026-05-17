@@ -710,55 +710,34 @@ body:not(.is-playing) .tracklist li.is-active::before { animation-play-state: pa
 .artists {
   list-style: none;
   padding: 0; margin: 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.7rem;
-}
-@media (min-width: 560px) {
-  .artists { grid-template-columns: repeat(2, 1fr); gap: 0.9rem; }
+  text-align: center;
+  max-width: 420px;
+  margin-inline: auto;
 }
 .artist {
   position: relative;
-  padding: 1.1rem 1.2rem;
-  border: 1px solid rgba(240,230,214,0.08);
-  border-radius: 8px;
-  background: linear-gradient(180deg, rgba(20,17,29,0.55), rgba(7,7,13,0.7));
-  transition: border-color 0.4s var(--ease-out), transform 0.4s var(--ease-out), background 0.4s;
-  overflow: hidden;
-}
-.artist::before {
-  content: "";
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 2px;
-  background: var(--amber);
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 0.5s var(--ease-out);
-}
-.artist:hover {
-  border-color: rgba(240,176,112,0.36);
-  transform: translateY(-2px);
-  background: linear-gradient(180deg, rgba(28,22,38,0.6), rgba(10,10,16,0.75));
-}
-.artist:hover::before { transform: scaleY(1); }
-.artist-name {
-  display: block;
   font-family: var(--serif);
   font-style: italic;
-  font-size: 1.1rem;
-  color: var(--moonlight);
-  margin-bottom: 0.35rem;
-}
-.artist-note {
-  display: block;
-  font-family: var(--serif);
   font-weight: 300;
-  font-size: 0.92rem;
-  color: var(--moonlight-d);
-  line-height: 1.55;
+  font-size: clamp(1.25rem, 5vw, 1.7rem);
+  letter-spacing: -0.005em;
+  color: var(--moonlight);
+  padding: 1.3rem 0;
+  cursor: default;
+  transition: color 0.5s var(--ease-out), letter-spacing 0.5s var(--ease-out);
 }
-.artist-note em { color: var(--amber); font-style: italic; }
+.artist + .artist::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 28px; height: 1px;
+  background: rgba(240,230,214,0.16);
+}
+.artist:hover {
+  color: var(--amber);
+  letter-spacing: 0.015em;
+}
 
 /* ==========================================================
    4) THE TICKET BOOTH
