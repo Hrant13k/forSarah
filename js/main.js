@@ -96,7 +96,7 @@ document.addEventListener("keydown", (e) => {
 
 // ---- console note ----
 console.log(
-  "%cyou opened the console.\n%cgood. you read the small print of things.\n— a quiet hour",
+  "%chey you opened the console.\n%cthat means you actually read the small stuff. respect.",
   "color:#f0b070; font-family: serif; font-style: italic; font-size: 14px;",
   "color:#c8c0b2; font-family: serif; font-size: 12px;"
 );

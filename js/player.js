@@ -99,7 +99,7 @@ export function initPlayer({ audio, tracks, ui }) {
     ui.vinyl?.classList.add("is-playing");
     ui.soundSwitch?.classList.add("is-playing");
     ui.soundSwitch?.setAttribute("aria-pressed", "true");
-    ui.dockNow && (ui.dockNow.textContent = "playing —");
+    ui.dockNow && (ui.dockNow.textContent = "now playing");
   });
   audio.addEventListener("pause", () => {
     document.body.classList.remove("is-playing");
