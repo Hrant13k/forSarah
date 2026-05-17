@@ -10,7 +10,7 @@
   <meta name="theme-color" content="#07070d" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400&family=Caveat:wght@400;500;600&display=swap" />
   <link rel="preload" as="image" href="images/curated/cosmos.jpg" />
   <link rel="stylesheet" href="styles/main.css" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='28'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E" />
@@ -157,16 +157,28 @@
       </aside>
     </section>
 
-    <!-- 4. THE REEL -->
-    <section id="reel" class="scene scene--reel">
+    <!-- 4. THE TICKET BOOTH -->
+    <section id="reel" class="scene scene--booth">
       <header class="scene-head">
         <span class="chapter">iii.</span>
-        <h2>fragments of an evening</h2>
-        <p class="scene-lede">swipe slowly. some of these are her, some are the weather she lives in.</p>
+        <h2>the ticket booth</h2>
+        <p class="scene-lede">a small stack of stubs from the evening. swipe through.</p>
       </header>
 
-      <div class="reel-track" data-reel></div>
-      <p class="reel-hint" aria-hidden="true">← swipe →</p>
+      <div class="booth">
+        <div class="booth-stage" data-booth-stage></div>
+
+        <div class="booth-controls">
+          <button class="booth-arrow" data-booth-prev aria-label="previous ticket">
+            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <span class="booth-counter" data-booth-counter>01 / 12</span>
+          <button class="booth-arrow" data-booth-next aria-label="next ticket">
+            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <p class="booth-hint" aria-hidden="true">tap or swipe to flip the stub</p>
+      </div>
     </section>
 
     <!-- 5. THE LETTER -->
@@ -180,7 +192,7 @@
         <p data-letter-line>some nights stretch like <span class="annotated" data-annot="vhs static · low fm · porchlight">cassette tape</span> — soft, warm, threatening to fray.</p>
         <p data-letter-line>you mentioned <em>patrick watson</em> once, in passing — the way someone names a <span class="annotated" data-annot="autumn, mostly">quiet weather</span>. it stayed.</p>
         <p data-letter-line>there are people who arrive like a <span class="annotated" data-annot="side a, track one">record dropping onto the spindle</span>. you realise you'd been listening for them.</p>
-        <p data-letter-line>nothing to prove. just <span class="annotated" data-annot="the small kind. the slow kind.">attention</span>, paid carefully.</p>
+        <p data-letter-line>nothing to prove. just <span class="annotated" data-annot="deduction as a love language">attention</span>, paid carefully.</p>
         <p data-letter-line class="letter-sign">— a small room, kept dimly lit.</p>
       </article>
     </section>

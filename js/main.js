@@ -1,7 +1,7 @@
-import { tracks, constellations, reel } from "./data.js";
+import { tracks, constellations, tickets } from "./data.js";
 import { initStarfield, renderConstellations } from "./stars.js";
 import { initPlayer } from "./player.js";
-import { initReel } from "./reel.js";
+import { initBooth } from "./reel.js";
 import { initCursor } from "./cursor.js";
 import { initDock } from "./dock.js";
 
@@ -44,9 +44,13 @@ const player = initPlayer({
   },
 });
 
-// ---- reel ----
-const reelHost = document.querySelector("[data-reel]");
-if (reelHost) initReel(reelHost, reel);
+// ---- booth (ticket carousel) ----
+const boothStage = document.querySelector("[data-booth-stage]");
+if (boothStage) initBooth(boothStage, tickets, {
+  prevBtn: document.querySelector("[data-booth-prev]"),
+  nextBtn: document.querySelector("[data-booth-next]"),
+  counter: document.querySelector("[data-booth-counter]"),
+});
 
 // ---- dock player ----
 const dock = document.querySelector("[data-dock]");
@@ -77,7 +81,7 @@ const ioLetter = new IntersectionObserver((entries) => {
 letterLines.forEach(p => ioLetter.observe(p));
 
 // ---- generic reveal ----
-const revealEls = document.querySelectorAll(".scene-head, .scene-lede, .now-playing, .artist, .polaroid");
+const revealEls = document.querySelectorAll(".scene-head, .scene-lede, .now-playing, .artist, .booth");
 const ioReveal = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {

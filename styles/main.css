@@ -815,102 +815,325 @@ body.is-playing .pc-play .pc-pause-icon { display: inline-block; }
 .artist-note em { color: var(--amber); font-style: italic; }
 
 /* ==========================================================
-   4) REEL
+   4) THE TICKET BOOTH
    ========================================================== */
-.scene--reel {
+.scene--booth {
   padding-bottom: clamp(5rem, 12vh, 8rem);
+  background:
+    radial-gradient(800px 500px at 100% 0%, rgba(42,20,34,0.25), transparent 60%);
 }
-.reel-track {
-  display: flex; gap: 1.1rem;
-  overflow-x: auto;
-  overflow-y: visible;
-  scroll-snap-type: x mandatory;
-  padding: 2rem 11vw 3rem;
-  margin: 0 calc(-1 * var(--pad));
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-x;
-  scroll-padding-inline: 11vw;
+.booth {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.reel-track::-webkit-scrollbar { display: none; }
-@media (min-width: 720px) {
-  .reel-track {
-    padding-inline: calc((100vw - 320px) / 2);
-    scroll-padding-inline: calc((100vw - 320px) / 2);
-  }
-}
-.polaroid {
-  flex: 0 0 78vw;
-  max-width: 320px;
-  scroll-snap-align: center;
-  background: linear-gradient(180deg, #efe5d0 0%, #e8dcc4 100%);
-  padding: 10px 10px 56px;
-  box-shadow: 0 20px 36px -12px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,0,0,0.2);
-  transform-origin: 50% 100%;
-  transform: rotate(var(--rot, -2deg));
-  transition: transform 0.7s var(--ease-out), box-shadow 0.5s;
-  color: #1a1410;
-  position: relative;
-  will-change: transform;
-}
-@media (min-width: 720px) {
-  .polaroid { flex-basis: 320px; }
-}
-.polaroid:hover {
-  transform: rotate(0deg) translateY(-10px) scale(1.02);
-  box-shadow: 0 36px 60px -12px rgba(0,0,0,0.75), 0 0 0 1px rgba(0,0,0,0.25);
-  z-index: 2;
-}
-.polaroid-photo {
+.booth-stage {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  background: #1a1410;
-  filter: grayscale(0.12) sepia(0.16) brightness(0.93) contrast(1.05);
+  height: clamp(520px, 78vh, 620px);
+  perspective: 1400px;
+  margin-bottom: 1.5rem;
+  touch-action: pan-y;
+  -webkit-user-select: none; user-select: none;
 }
-.polaroid-photo img {
-  width: 100%; height: 100%;
-  object-fit: cover;
+
+/* base ticket */
+.ticket {
+  --paper-a: #f4e7cc;
+  --paper-b: #e7d6b3;
+  --paper-edge: #d4bf95;
+  --ink: #2a1a14;
+  --ink-d: #6b513a;
+  --ink-m: #4a3525;
+
+  position: absolute;
+  left: 50%; top: 50%;
+  width: min(86vw, 340px);
+  aspect-ratio: 0.62 / 1;
+  transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
+  transform-origin: 50% 50%;
+  background:
+    linear-gradient(170deg, var(--paper-a) 0%, var(--paper-b) 100%);
+  color: var(--ink);
+  border: 1px solid rgba(80, 50, 30, 0.18);
+  border-radius: 6px;
+  padding: 18px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    0 30px 50px -16px rgba(0,0,0,0.75),
+    0 0 0 1px rgba(0,0,0,0.08),
+    inset 0 0 60px rgba(120,80,40,0.08);
+  transition:
+    transform 0.7s var(--ease-out),
+    opacity 0.55s var(--ease-out),
+    filter 0.6s var(--ease-out);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+  z-index: 1;
 }
-.polaroid-photo::after {
+/* aged paper grain */
+.ticket::before {
   content: "";
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.5) 100%);
+  background:
+    radial-gradient(circle at 18% 22%, rgba(120,80,40,0.08), transparent 40%),
+    radial-gradient(circle at 82% 78%, rgba(60,30,10,0.10), transparent 40%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.3   0 0 0 0 0.2   0 0 0 0 0.1   0 0 0 0.18 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size: cover, cover, 200px 200px;
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+  border-radius: inherit;
   pointer-events: none;
 }
-.polaroid-caption {
+/* corner notches — small darkened corners */
+.ticket::after {
+  content: "";
   position: absolute;
-  left: 10px; right: 10px; bottom: 12px;
-  text-align: center;
+  inset: 0;
+  background:
+    radial-gradient(circle at 0 0, rgba(0,0,0,0.25) 0 4px, transparent 5px),
+    radial-gradient(circle at 100% 0, rgba(0,0,0,0.25) 0 4px, transparent 5px),
+    radial-gradient(circle at 0 100%, rgba(0,0,0,0.25) 0 4px, transparent 5px),
+    radial-gradient(circle at 100% 100%, rgba(0,0,0,0.25) 0 4px, transparent 5px);
+  pointer-events: none;
+  opacity: 0.3;
+  border-radius: inherit;
 }
-.polaroid-title {
-  display: block;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 1rem;
-  color: #1a1410;
-  margin-bottom: 0.15rem;
+
+/* slot states (carousel positions) */
+.ticket.is-current {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
+  z-index: 3;
 }
-.polaroid-note {
-  display: block;
+.ticket.is-prev {
+  opacity: 0;
+  transform: translate(-220%, -50%) rotate(-22deg) scale(0.92);
+  filter: blur(2px);
+  z-index: 2;
+}
+.ticket.is-next {
+  opacity: 0;
+  transform: translate(120%, -42%) rotate(20deg) scale(0.92);
+  filter: blur(2px);
+  z-index: 2;
+}
+
+/* during pointer drag — instant follow */
+.booth-stage.is-dragging .ticket.is-current { transition: none; }
+
+/* === Ticket inner === */
+.ticket-strip {
+  display: flex; align-items: center; justify-content: space-between;
   font-family: var(--mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.14em;
-  text-transform: lowercase;
-  color: #5a4a3a;
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-d);
+  padding-bottom: 0.7rem;
+  border-bottom: 1px dashed rgba(80,40,20,0.45);
+  position: relative;
+}
+.t-serial { display: inline-flex; align-items: center; gap: 0.4rem; }
+.t-stamp {
+  display: inline-grid; place-items: center;
+  width: 26px; height: 26px;
+  border: 1.5px solid var(--ink-m);
+  border-radius: 50%;
+  color: var(--ink-m);
+  font-size: 0.78rem;
+  transform: rotate(-7deg);
   opacity: 0.85;
 }
-.reel-hint {
+
+.ticket-photo {
+  margin: 0.9rem -2px 0.4rem;
+  border-radius: 3px;
+  overflow: hidden;
+  background: #1a1410;
+  aspect-ratio: 4 / 3;
+  position: relative;
+  flex-shrink: 0;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.4);
+}
+.ticket-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.2) sepia(0.18) brightness(0.92) contrast(1.05);
+}
+.ticket-photo::after {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom, transparent 60%, rgba(20,10,6,0.55)),
+    repeating-linear-gradient(180deg, transparent 0 3px, rgba(0,0,0,0.04) 3px 4px);
+  pointer-events: none;
+}
+
+.ticket-body {
+  padding: 1rem 0 0.6rem;
   text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+.t-overline {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.32em;
+  text-transform: lowercase;
+  color: var(--ink-d);
+}
+.t-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 6vw, 2.1rem);
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 0.5rem 0 0.4rem;
+}
+.t-sub {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-style: italic;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  color: var(--ink-m);
+  margin: 0;
+  max-width: 24ch;
+  margin-inline: auto;
+}
+
+.ticket-perf {
+  height: 8px;
+  margin: 0.6rem -20px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(80,40,20,0.55) 1.1px, transparent 1.5px) repeat-x;
+  background-size: 9px 8px;
+}
+
+.ticket-foot {
+  display: flex; justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+  color: var(--ink-d);
+  padding-top: 0.3rem;
+}
+
+/* === Doppelgänger variant === */
+.ticket--doppel {
+  --paper-a: #f7eed8;
+  --paper-b: #ebd9b5;
+}
+.ticket--doppel .doppel-photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin: 0.7rem 0 0.3rem;
+}
+.doppel-photo {
+  margin: 0;
+  position: relative;
+  border-radius: 3px;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  background: #1a1410;
+  box-shadow: inset 0 0 24px rgba(0,0,0,0.4);
+}
+.doppel-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: 50% 25%;
+  filter: grayscale(0.4) sepia(0.22) brightness(0.94) contrast(1.04);
+}
+.doppel-photo figcaption {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 4px 6px;
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.16em;
+  text-transform: lowercase;
+  color: #f0e6d6;
+  background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+  text-align: center;
+}
+.doppel-note {
+  font-family: "Caveat", cursive;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.28;
+  color: var(--ink);
+  text-align: left;
+  margin: 0.6rem 0 0.2rem;
+  padding: 0 2px;
+  flex: 1;
+  overflow: hidden;
+}
+.doppel-note em { font-style: italic; color: #7a2a1a; font-weight: 600; }
+.doppel-note-post {
+  display: inline-block;
+  margin-left: 0.2rem;
+  font-size: 1.1rem;
+}
+.ticket--doppel .ticket-foot {
+  font-family: "Caveat", cursive;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-weight: 500;
+}
+
+/* === booth controls === */
+.booth-controls {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1.5rem;
+  margin-top: 0.8rem;
+}
+.booth-arrow {
+  width: 48px; height: 48px;
+  border-radius: 999px;
+  border: 1px solid rgba(240,230,214,0.18);
+  color: var(--moonlight);
+  display: grid; place-items: center;
+  transition: border-color 0.4s, color 0.4s, transform 0.2s;
+}
+.booth-arrow:hover { border-color: var(--amber); color: var(--amber); }
+.booth-arrow:active { transform: scale(0.92); }
+.booth-counter {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.32em;
+  color: var(--moonlight-d);
+  min-width: 6ch;
+  text-align: center;
+}
+.booth-hint {
+  margin: 1rem 0 0;
   font-family: var(--mono);
   font-size: 0.6rem;
   letter-spacing: 0.36em;
   color: var(--moonlight-d);
-  opacity: 0.5;
-  margin: 0;
+  opacity: 0.4;
+  text-align: center;
 }
-@media (pointer: fine) { .reel-hint { display: none; } }
+@media (pointer: fine) { .booth-hint { display: none; } }
+
+@media (max-width: 380px) {
+  .ticket { width: 88vw; padding: 14px 14px 12px; }
+  .t-title { font-size: 1.5rem; }
+  .ticket-photo { aspect-ratio: 4 / 3; }
+}
 
 /* ==========================================================
    5) LETTER
