@@ -68,18 +68,6 @@ if (beginBtn) {
   });
 }
 
-// ---- letter reveal line by line ----
-const letterLines = document.querySelectorAll("[data-letter-line]");
-const ioLetter = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add("is-revealed"), i * 180);
-      ioLetter.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.35 });
-letterLines.forEach(p => ioLetter.observe(p));
-
 // ---- generic reveal ----
 const revealEls = document.querySelectorAll(".scene-head, .scene-lede, .now-playing, .artist, .booth");
 const ioReveal = new IntersectionObserver((entries) => {
@@ -92,24 +80,8 @@ const ioReveal = new IntersectionObserver((entries) => {
 }, { threshold: 0.15 });
 revealEls.forEach(el => { el.classList.add("reveal"); ioReveal.observe(el); });
 
-// ---- annotated words: tap-to-toggle on touch (hover keeps working on desktop) ----
-document.querySelectorAll(".annotated").forEach(el => {
-  el.addEventListener("click", e => {
-    if (matchMedia("(pointer: coarse)").matches) {
-      e.preventDefault();
-      el.classList.toggle("is-open");
-      // close peers
-      document.querySelectorAll(".annotated.is-open").forEach(o => {
-        if (o !== el) o.classList.remove("is-open");
-      });
-    }
-  });
-});
-// tap outside closes any open annotation/constellation
+// tap outside closes any open constellation
 document.addEventListener("click", e => {
-  if (!e.target.closest(".annotated")) {
-    document.querySelectorAll(".annotated.is-open").forEach(o => o.classList.remove("is-open"));
-  }
   if (!e.target.closest(".con-card")) {
     document.querySelectorAll(".con-card.is-open").forEach(o => {
       o.classList.remove("is-open");
