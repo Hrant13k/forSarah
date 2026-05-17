@@ -40,6 +40,7 @@ export function initPlayer({ audio, tracks, ui }) {
     }, { once: true });
   });
 
+  let firstLoad = true;
   function load(i, autoplay = false) {
     current = (i + tracks.length) % tracks.length;
     const t = tracks[current];
@@ -50,7 +51,20 @@ export function initPlayer({ audio, tracks, ui }) {
   }
   function setActive() {
     items.forEach((li, i) => li.classList.toggle("is-active", i === current));
-    items[current]?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    // skip auto-scroll on the very first load so the page doesn't jump on open
+    if (firstLoad) { firstLoad = false; return; }
+    // scroll only within the tracklist container — never the page
+    const el = items[current];
+    const container = ui.tracklist;
+    if (!el || !container) return;
+    const top = el.offsetTop - container.offsetTop;
+    const bottom = top + el.offsetHeight;
+    if (top < container.scrollTop || bottom > container.scrollTop + container.clientHeight) {
+      container.scrollTo({
+        top: top - container.clientHeight / 2 + el.offsetHeight / 2,
+        behavior: "smooth",
+      });
+    }
   }
   function setTitle(s) {
     ui.titleTargets.forEach(el => el.textContent = s);

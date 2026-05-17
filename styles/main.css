@@ -1068,11 +1068,12 @@ body.is-playing .pc-play .pc-pause-icon { display: inline-block; }
   background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
   text-align: center;
 }
-.doppel-note {
+/* shared handwritten note (used by doppel, thanks, note) */
+.t-note {
   font-family: "Caveat", cursive;
   font-weight: 500;
-  font-size: 1rem;
-  line-height: 1.28;
+  font-size: 1.02rem;
+  line-height: 1.3;
   color: var(--ink);
   text-align: left;
   margin: 0.6rem 0 0.2rem;
@@ -1080,18 +1081,41 @@ body.is-playing .pc-play .pc-pause-icon { display: inline-block; }
   flex: 1;
   overflow: hidden;
 }
-.doppel-note em { font-style: italic; color: #7a2a1a; font-weight: 600; }
-.doppel-note-post {
+.t-note em { font-style: italic; color: #7a2a1a; font-weight: 600; }
+.t-note-post {
   display: inline-block;
   margin-left: 0.2rem;
   font-size: 1.1rem;
 }
-.ticket--doppel .ticket-foot {
+.ticket--doppel .ticket-foot,
+.ticket--thanks .ticket-foot,
+.ticket--note .ticket-foot {
   font-family: "Caveat", cursive;
-  font-size: 0.85rem;
+  font-size: 0.92rem;
   letter-spacing: 0.04em;
   text-transform: none;
   font-weight: 500;
+  color: var(--ink-m);
+}
+
+/* === thanks (poster-portrait photo) === */
+.ticket--thanks .ticket-photo { aspect-ratio: 3 / 4; max-height: 240px; }
+.ticket--thanks .ticket-photo img { object-position: 50% 18%; filter: grayscale(0.18) sepia(0.18) brightness(0.94) contrast(1.06); }
+
+/* === note (landscape photo) === */
+.ticket--note .ticket-photo { aspect-ratio: 5 / 3; }
+.ticket--note .ticket-photo img { filter: grayscale(0.18) sepia(0.22) brightness(0.92) contrast(1.05); }
+
+/* compact title used in thanks/note layouts */
+.t-title--compact {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.2rem, 4.6vw, 1.5rem);
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 0.6rem 0 0.1rem;
+  text-align: center;
 }
 
 /* === booth controls === */

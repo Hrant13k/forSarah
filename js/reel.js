@@ -29,11 +29,30 @@ function ticketHTML(t) {
       </div>
       <div class="doppel-photos">${photos}</div>
       <div class="ticket-perf"></div>
-      <p class="doppel-note">${escapeHtml(t.note || "")}${t.notePost ? `<span class="doppel-note-post">${escapeHtml(t.notePost)}</span>` : ""}</p>
+      <p class="t-note">${escapeHtml(t.note || "")}${t.notePost ? `<span class="t-note-post">${escapeHtml(t.notePost)}</span>` : ""}</p>
       ${footHTML}
     `;
   }
 
+  if (t.kind === "thanks" || t.kind === "note") {
+    const photo = t.photo
+      ? `<div class="ticket-photo"><img src="${escapeHtml(t.photo)}" alt="${title}" loading="lazy" decoding="async"></div>`
+      : "";
+    return `
+      <div class="ticket-strip">
+        <span class="t-serial">${serial}</span>
+        <span class="t-stamp">${stamp}</span>
+        <span class="t-serial">${escapeHtml(overline)}</span>
+      </div>
+      ${photo}
+      <h3 class="t-title t-title--compact">${title}</h3>
+      <p class="t-note">${escapeHtml(t.note || "")}</p>
+      <div class="ticket-perf"></div>
+      ${footHTML}
+    `;
+  }
+
+  // legacy fallback: cinema / typo
   const photo = t.kind === "cinema" && t.photo
     ? `<div class="ticket-photo"><img src="${escapeHtml(t.photo)}" alt="${title}" loading="lazy" decoding="async"></div>`
     : "";
@@ -64,7 +83,7 @@ export function initBooth(stage, tickets, { prevBtn, nextBtn, counter }) {
   stage.innerHTML = "";
   const els = tickets.map((t, i) => {
     const el = document.createElement("article");
-    el.className = "ticket" + (t.kind === "doppel" ? " ticket--doppel" : "");
+    el.className = "ticket" + (t.kind ? ` ticket--${t.kind}` : "");
     el.style.setProperty("--rot", `${t.rot || 0}deg`);
     el.dataset.idx = i;
     el.innerHTML = ticketHTML(t);
