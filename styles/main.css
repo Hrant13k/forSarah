@@ -398,33 +398,34 @@ body.is-loading .topnav { opacity: 0; pointer-events: none; }
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2.5rem;
+  gap: 1.6rem;
+  padding-inline: 0.5rem;
+  width: 100%;
 }
 @media (min-width: 900px) {
   .record-grid {
     grid-template-columns: 1.05fr 0.95fr;
     gap: 2.5rem 3.5rem;
     align-items: start;
+    padding-inline: 0;
   }
 }
 
 /* vinyl */
 .vinyl-stage {
   position: relative;
-  padding: 1.4rem 1.2rem 1.6rem;
-  border-radius: 18px;
+  padding: 1.6rem 1rem 1.8rem;
+  border-radius: 20px;
   background:
-    radial-gradient(circle at 50% 35%, rgba(240,176,112,0.05), transparent 55%),
-    linear-gradient(180deg, rgba(20,17,29,0.35), rgba(7,7,13,0.4));
-  border: 1px solid rgba(240,230,214,0.06);
-  box-shadow: inset 0 1px 0 rgba(240,230,214,0.04);
+    radial-gradient(circle at 50% 30%, rgba(240,176,112,0.06), transparent 60%),
+    linear-gradient(180deg, rgba(20,17,29,0.4), rgba(7,7,13,0.25));
+  border: 1px solid rgba(240,230,214,0.05);
 }
 @media (min-width: 900px) {
   .vinyl-stage {
     background:
       radial-gradient(circle at 50% 35%, rgba(240,176,112,0.04), transparent 60%);
     border: none;
-    box-shadow: none;
     padding: 0;
   }
 }
@@ -624,11 +625,10 @@ body.is-playing .pc-play .pc-pause-icon { display: inline-block; }
 }
 .tracklist-wrap {
   position: relative;
-  padding: 1.4rem 1.2rem 1.2rem;
-  border-radius: 18px;
-  background: linear-gradient(180deg, rgba(20,17,29,0.35), rgba(7,7,13,0.4));
-  border: 1px solid rgba(240,230,214,0.06);
-  box-shadow: inset 0 1px 0 rgba(240,230,214,0.04);
+  padding: 1.4rem 1rem 1.2rem;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(20,17,29,0.4), rgba(7,7,13,0.25));
+  border: 1px solid rgba(240,230,214,0.05);
 }
 @media (min-width: 900px) {
   .tracklist-wrap {
